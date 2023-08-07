@@ -1,9 +1,12 @@
+import com.urise.model.Resume;
+import com.urise.storage.ArrayStorage;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Interactive test for ArrayStorage implementation
+ * Interactive test for com.urise.storage.ArrayStorage implementation
  * (just run, no need to understand)
  */
 public class MainArray {
