@@ -8,8 +8,13 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void addAndIncrementResume(Resume r) {
-        STORAGE[size++] = r;
+    public boolean saveResume(Resume r) {
+        if (size == STORAGE.length) {
+            System.out.println("storage is full, can't add resume, size is " + size);
+            return false;
+        }
+        STORAGE[size] = r;
+        return true;
     }
 
     public Resume get(String uuid) {
@@ -23,7 +28,17 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     public void deleteResume(int index) {
         STORAGE[index] = STORAGE[size - 1];
-        STORAGE[--size] = null;
+        STORAGE[size] = null;
+    }
+
+    @Override
+    public int getIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (STORAGE[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public int size() {

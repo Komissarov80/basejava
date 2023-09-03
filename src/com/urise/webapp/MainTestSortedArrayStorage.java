@@ -21,10 +21,14 @@ public class MainTestSortedArrayStorage {
         SORTED_ARRAY_STORAGE.save(r5);
         SORTED_ARRAY_STORAGE.save(r3);
         SORTED_ARRAY_STORAGE.save(r4);
+
+
         System.out.println(testSaveMethod());
         SORTED_ARRAY_STORAGE.delete("Andrey");
         System.out.println(testDeleteMethod());
         System.out.println(testUpdateMethod());
+        System.out.println(testGetIndex());
+        SORTED_ARRAY_STORAGE.delete("Andrey");
     }
 
     public static String testDeleteMethod() {
@@ -53,6 +57,19 @@ public class MainTestSortedArrayStorage {
             return "update method fail";
         }
         return "update method passed";
+    }
+
+    public static String testGetIndex() {
+        // index of resume with name Sasha
+        int indexSasha = 2;
+        int answerForSasha = SORTED_ARRAY_STORAGE.getIndex("Sasha");
+        // in STORAGE there are not Dasha, so getIndex() must return -1
+        int indexDasha = -1;
+        int answerForDasha = SORTED_ARRAY_STORAGE.getIndex("Dasha");
+        if (indexSasha != 2 || indexDasha != -1) {
+            return "testGetIndex failed";
+        }
+        return "testGetIndex passed";
     }
 
 }

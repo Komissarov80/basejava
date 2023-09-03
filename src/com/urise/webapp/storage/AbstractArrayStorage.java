@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
+import java.sql.SQLOutput;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
@@ -11,19 +12,13 @@ public abstract class AbstractArrayStorage implements Storage {
     protected int size = 0;
 
     public final void save(Resume resume) {
-        boolean checkSize = checkSizeStorage();
         boolean checkResumeInStorage = checkResumInStorade(resume);
-        if (checkSize && checkResumeInStorage) {
-            addAndIncrementResume(resume);
+        if (checkResumeInStorage) {
+            if (saveResume(resume)){
+                size++;
+            }
         }
-    }
 
-    public boolean checkSizeStorage() {
-        if (size == STORAGE_LIMIT) {
-            System.out.println("storage is full, can't add resume, size is " + size);
-            return false;
-        }
-        return true;
     }
 
     public boolean checkResumInStorade(Resume resume) {
@@ -38,8 +33,6 @@ public abstract class AbstractArrayStorage implements Storage {
         }
         return true;
     }
-
-    public abstract void addAndIncrementResume(Resume resume);
 
     public int size() {
         return size;
@@ -63,25 +56,15 @@ public abstract class AbstractArrayStorage implements Storage {
         return STORAGE[index];
     }
 
-    public int getIndex(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(STORAGE[i].getUuid())) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public final void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
             deleteResume(index);
+            size--;
         } else {
             System.out.println("there are not in storage resume whit uuid=" + uuid + " to deleting");
         }
     }
-
-    public abstract void deleteResume(int index);
 
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
@@ -91,5 +74,11 @@ public abstract class AbstractArrayStorage implements Storage {
         }
         STORAGE[index] = resume;
     }
+
+    public abstract boolean saveResume(Resume resume);
+
+    public abstract void deleteResume(int index);
+
+    public abstract int getIndex(String uuid);
 
 }
