@@ -2,7 +2,6 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.sql.SQLOutput;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
@@ -12,26 +11,16 @@ public abstract class AbstractArrayStorage implements Storage {
     protected int size = 0;
 
     public final void save(Resume resume) {
-        boolean checkResumeInStorage = checkResumInStorade(resume);
-        if (checkResumeInStorage) {
-            if (saveResume(resume)){
-                size++;
-            }
+        if (STORAGE.length == size) {
+            System.out.println("storage is full, can't add resume, size is " + size);
+            return;
         }
-
-    }
-
-    public boolean checkResumInStorade(Resume resume) {
-        if (resume == null) {
-            return false;
+        if (getIndex(resume.getUuid()) != -1) {
+            System.out.println("Can't save resume. Storage contain resume with uuid " + resume.getUuid());
+            return;
         }
-        for (int i = 0; i < size; i++) {
-            if (resume.getUuid().equals(STORAGE[i].getUuid())) {
-                System.out.println("there are in storage resume whit uuid=" + resume.getUuid() + " can't adding");
-                return false;
-            }
-        }
-        return true;
+        saveResume(resume);
+        size++;
     }
 
     public int size() {
@@ -47,7 +36,7 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public Resume get(String uuid) {
+    public final Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index == -1) {
             System.out.println("Resume " + uuid + " not exist");
@@ -66,7 +55,7 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    public void update(Resume resume) {
+    public final void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index == -1) {
             System.out.println("there are not in storage resume whit uuid=" + resume.getUuid() + " to updating");
@@ -75,7 +64,7 @@ public abstract class AbstractArrayStorage implements Storage {
         STORAGE[index] = resume;
     }
 
-    public abstract boolean saveResume(Resume resume);
+    public abstract void saveResume(Resume resume);
 
     public abstract void deleteResume(int index);
 

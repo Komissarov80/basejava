@@ -7,27 +7,11 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public boolean saveResume(Resume resume) {
-        if (STORAGE.length == size) {
-            System.out.println("storage is full, can't add resume, size is " + size);
-            return false;
-        }
-        if (size == 0) {
-            STORAGE[size] = resume;
-            return true;
-        } else {
-            int indexElement = Arrays.binarySearch(STORAGE, 0, size, resume);
-            if (indexElement == -1) {
-                System.arraycopy(STORAGE, 0, STORAGE, 1, size);
-                STORAGE[0] = resume;
-                return true;
-            } else {
-                int indexResume = Math.abs(indexElement) - 1;
-                System.arraycopy(STORAGE, indexResume, STORAGE, indexResume + 1, size - indexResume);
-                STORAGE[indexResume] = resume;
-                return true;
-            }
-        }
+    public void saveResume(Resume resume) {
+        int indexElement = Arrays.binarySearch(STORAGE, 0, size, resume);
+        int indexResume = Math.abs(indexElement) - 1;
+        System.arraycopy(STORAGE, indexResume, STORAGE, indexResume + 1, size - indexResume);
+        STORAGE[indexResume] = resume;
     }
 
     @Override

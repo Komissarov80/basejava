@@ -8,22 +8,8 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public boolean saveResume(Resume r) {
-        if (size == STORAGE.length) {
-            System.out.println("storage is full, can't add resume, size is " + size);
-            return false;
-        }
+    public void saveResume(Resume r) {
         STORAGE[size] = r;
-        return true;
-    }
-
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index != -1) {
-            return STORAGE[index];
-        }
-        System.out.println("there are not in storage resume whit uuid=" + uuid + " to getting");
-        return null;
     }
 
     public void deleteResume(int index) {
@@ -39,10 +25,6 @@ public class ArrayStorage extends AbstractArrayStorage {
             }
         }
         return -1;
-    }
-
-    public int size() {
-        return size;
     }
 
 }
