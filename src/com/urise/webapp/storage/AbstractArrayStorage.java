@@ -11,15 +11,16 @@ public abstract class AbstractArrayStorage implements Storage {
     protected int size = 0;
 
     public final void save(Resume resume) {
+        int index = getIndex(resume.getUuid());
         if (STORAGE.length == size) {
             System.out.println("storage is full, can't add resume, size is " + size);
             return;
         }
-        if (getIndex(resume.getUuid()) != -1) {
+        if (index >= 0) {
             System.out.println("Can't save resume. Storage contain resume with uuid " + resume.getUuid());
             return;
         }
-        saveResume(resume);
+        saveResume(resume, index);
         size++;
     }
 
@@ -64,7 +65,7 @@ public abstract class AbstractArrayStorage implements Storage {
         STORAGE[index] = resume;
     }
 
-    public abstract void saveResume(Resume resume);
+    public abstract void saveResume(Resume resume, int index);
 
     public abstract void deleteResume(int index);
 
