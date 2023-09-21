@@ -7,6 +7,7 @@ import com.urise.webapp.storage.ArrayStorage;
  * Test for your com.urise.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
+
     static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
@@ -37,6 +38,7 @@ public class MainTestArrayStorage {
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
         printAll();
+        System.out.println("getPerIndex" + ARRAY_STORAGE.getPerIndex(0));
         ARRAY_STORAGE.clear();
         printAll();
 
@@ -49,4 +51,5 @@ public class MainTestArrayStorage {
             System.out.println(r);
         }
     }
+
 }

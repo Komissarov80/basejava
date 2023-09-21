@@ -30,13 +30,13 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) {
+        if (this == obj) {
             return true;
         }
-        if(obj == null || getClass() != obj.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        Resume resume = (Resume)obj;
+        Resume resume = (Resume) obj;
         return this.uuid.equals(resume.uuid);
     }
 
