@@ -1,5 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -16,10 +19,10 @@ public abstract class AbstractArrayStorage implements Storage {
         }
         int index = getIndex(resume.getUuid());
         if (size + 1 > STORAGE_LIMIT) {
-            throw new IllegalArgumentException("storage is full, can't add resume, size is " + size);
+            throw new StorageException("storage is full, can't add resume ", resume.getUuid());
         }
         if (index >= 0) {
-            throw new IllegalArgumentException("Can't save resume. Storage contain resume with uuid " + resume.getUuid());
+            throw new ExistStorageException(resume.getUuid());
         }
         saveResume(resume, index);
         size++;
@@ -41,7 +44,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public final Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            throw new IllegalArgumentException("Resume " + uuid + " not exist");
+            throw new NotExistStorageException(uuid);
         }
         return STORAGE[index];
     }
@@ -52,14 +55,14 @@ public abstract class AbstractArrayStorage implements Storage {
             deleteResume(index);
             size--;
         } else {
-            throw new IllegalArgumentException("Resume " + uuid + " not exist");
+            throw new NotExistStorageException(uuid);
         }
     }
 
     public final void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            throw new IllegalArgumentException("there are not in storage resume whit uuid=" + resume.getUuid() + " to updating");
+            throw new NotExistStorageException(resume.getUuid());
         }
         STORAGE[index] = resume;
     }
