@@ -26,7 +26,6 @@ public abstract class AbstractArrayStorageTest {
     public static final Resume r2 = new Resume(uuid2);
     public static final Resume r3 = new Resume(uuid3);
 
-
     public AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
@@ -43,7 +42,7 @@ public abstract class AbstractArrayStorageTest {
         assertSize(3);
         Resume r4 = new Resume(uuid4);
         storage.save(r4);
-        assertGet(r4);
+        assertSize(4);
     }
 
     @Test
@@ -99,10 +98,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     void update() {
-        Resume r4 = new Resume(uuid4);
-        storage.save(r4);
-        r4.setUuid(uuid5);
-        assertSame(r4.getUuid(), uuid5);
+        Resume r4 = new Resume(uuid3);
+        storage.update(r4);
+        assertSame(storage.get("Anton"), r4);
     }
 
     @Test
@@ -113,16 +111,16 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     void overflowArrayException() {
-        Resume r4 = new Resume(uuid4);
         storage.clear();
         try {
             for (int i = storage.size(); i < STORAGE_LIMIT; i++) {
                 storage.save(new Resume(String.valueOf(i)));
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            fail("Storage overflow ahead of time. Test failed");
+        } catch (ArrayIndexOutOfBoundsException | StorageException e) {
+            fail("Storage fills wrong. Test failed");
         }
         assertSize(STORAGE_LIMIT);
+        Resume r4 = new Resume(uuid4);
         assertThrows(StorageException.class, () -> storage.save(r4));
     }
 
