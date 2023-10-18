@@ -50,7 +50,7 @@ public class MainTestSortedArrayStorage {
     }
 
     public static String testUpdateMethod() {
-        int index = SORTED_ARRAY_STORAGE.getIndex("Sasha");
+        int index = (int) SORTED_ARRAY_STORAGE.getSearchKey("Sasha");
         Resume r6 = new Resume("Sasha");
         SORTED_ARRAY_STORAGE.update(r6);
         if (SORTED_ARRAY_STORAGE.STORAGE[index] != r6) {
@@ -62,10 +62,10 @@ public class MainTestSortedArrayStorage {
     public static String testGetIndex() {
         // index of resume with name Sasha
         int indexSasha = 2;
-        int answerForSasha = SORTED_ARRAY_STORAGE.getIndex("Sasha");
+        int answerForSasha = (int) SORTED_ARRAY_STORAGE.getSearchKey("Sasha");
         // in STORAGE there are not Dasha, so getIndex() must return -1
         int indexDasha = -1;
-        int answerForDasha = SORTED_ARRAY_STORAGE.getIndex("Dasha");
+        int answerForDasha = (int) SORTED_ARRAY_STORAGE.getSearchKey("Dasha");
         if (indexSasha != 2 || indexDasha != -1) {
             return "testGetIndex failed";
         }

@@ -32,6 +32,7 @@ public abstract class AbstractArrayStorageTest {
 
     @BeforeEach
     public void setValue() {
+        storage.clear();
         storage.save(r3);
         storage.save(r2);
         storage.save(r1);

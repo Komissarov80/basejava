@@ -6,14 +6,21 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
+    private void getExistingSearchKey(String uuid) {
+        throw new ExistStorageException(uuid);
+    }
+
+    private void getNotExistingSearchKey(String uuid) {
+        throw new NotExistStorageException(uuid);
+    }
+
     @Override
     public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            updateResume(index, r);
-        } else {
-            throw new NotExistStorageException(r.getUuid());
+        Object searchKey = getSearchKey(r.getUuid());
+        if (searchKey == null) {
+            getNotExistingSearchKey(r.getUuid());
         }
+        updateResume(searchKey, r);
     }
 
     @Override
@@ -21,31 +28,29 @@ public abstract class AbstractStorage implements Storage {
         if (r == null) {
             throw new IllegalArgumentException("Can't save resume. Resume is null");
         }
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
+        Object searchKey = getSearchKey(r.getUuid());
+        if (searchKey != null) {
+             getExistingSearchKey(r.getUuid());
         }
-        saveResume(r, index);
+        saveResume(r);
     }
 
     @Override
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            return getResume(uuid, index);
+        Object searchKey = getSearchKey(uuid);
+        if (searchKey == null) {
+            getNotExistingSearchKey(uuid);
         }
+        return getResume(uuid, searchKey);
     }
 
     @Override
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            deleteResume(uuid, index);
+        Object searchKey = getSearchKey(uuid);
+        if (searchKey == null) {
+            getNotExistingSearchKey(uuid);
         }
+        deleteResume(uuid, searchKey);
     }
 
     @Override
@@ -57,13 +62,15 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public abstract Resume[] getAll();
 
-    public abstract void updateResume(int index, Resume r);
+    public abstract void updateResume(Object index, Resume r);
 
-    public abstract void saveResume(Resume r, int index);
+    public abstract void saveResume(Resume r);
 
-    public abstract int getIndex(String uuid);
+    public abstract Object getSearchKey(String uuid);
 
-    public abstract void deleteResume(String uuid, int index);
+    public abstract void deleteResume(String uuid, Object index);
 
-    public abstract Resume getResume(String uuid, int index);
+    public abstract Resume getResume(String uuid, Object index);
+
+    public abstract String isExist(String uuid);
 }

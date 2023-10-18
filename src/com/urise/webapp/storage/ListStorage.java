@@ -7,52 +7,57 @@ import java.util.List;
 
 public class ListStorage extends AbstractStorage {
 
-    public static final List<Resume> listResumes = new ArrayList();
+    public static final List<Resume> storage = new ArrayList<>();
 
     @Override
     public void clear() {
-        listResumes.clear();
+        storage.clear();
     }
 
     @Override
-    public void updateResume(int index, Resume r) {
-        listResumes.set(index, r);
+    public void updateResume(Object index, Resume r) {
+        storage.set((Integer)index, r);
     }
 
     @Override
-    public void saveResume(Resume r, int index) {
-        listResumes.add(r);
+    public void saveResume(Resume r) {
+        storage.add(r);
     }
 
     @Override
-    public Resume getResume(String uuid, int index) {
-        return listResumes.get(index);
+    public Resume getResume(String uuid, Object index) {
+        return storage.get((Integer)index);
 
+    }
+
+    @Override
+    public String isExist(String uuid) {
+        return null;
     }
 
     @Override
     public Resume[] getAll() {
-        return listResumes.toArray(new Resume[0]);
+        return storage.toArray(new Resume[0]);
     }
 
     @Override
-    public void deleteResume(String uuid, int index) {
-        listResumes.remove(index);
+    public void deleteResume(String uuid, Object index) {
+        storage.remove((int)index);
     }
 
     @Override
     public int size() {
-        return listResumes.size();
+        return storage.size();
     }
 
     @Override
-    public int getIndex(String uuid) {
+    public Object getSearchKey(String uuid) {
         for (int i = 0; i < size(); i++) {
-            if (listResumes.get(i).getUuid().equals(uuid)) {
+            if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
-        return -1;
+        return null;
     }
 
 }
