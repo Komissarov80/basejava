@@ -6,21 +6,9 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    private void getExistingSearchKey(String uuid) {
-        throw new ExistStorageException(uuid);
-    }
-
-    private void getNotExistingSearchKey(String uuid) {
-        throw new NotExistStorageException(uuid);
-    }
-
     @Override
     public void update(Resume r) {
-        Object searchKey = getSearchKey(r.getUuid());
-        if (searchKey == null) {
-            getNotExistingSearchKey(r.getUuid());
-        }
-        updateResume(searchKey, r);
+        updateResume(getNotExistingSearchKey(r.getUuid()), r);
     }
 
     @Override
@@ -28,29 +16,34 @@ public abstract class AbstractStorage implements Storage {
         if (r == null) {
             throw new IllegalArgumentException("Can't save resume. Resume is null");
         }
-        Object searchKey = getSearchKey(r.getUuid());
-        if (searchKey != null) {
-             getExistingSearchKey(r.getUuid());
-        }
+        getExistingSearchKey(r.getUuid());
         saveResume(r);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object searchKey = getSearchKey(uuid);
-        if (searchKey == null) {
-            getNotExistingSearchKey(uuid);
-        }
-        return getResume(uuid, searchKey);
+        return getResume(uuid, getNotExistingSearchKey(uuid));
     }
 
     @Override
     public void delete(String uuid) {
+        deleteResume(uuid, getNotExistingSearchKey(uuid));
+    }
+
+    private Object getExistingSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (searchKey != null) {
+            throw new ExistStorageException(uuid);
+        }
+        return searchKey;
+    }
+
+    private Object getNotExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
         if (searchKey == null) {
-            getNotExistingSearchKey(uuid);
+            throw new NotExistStorageException(uuid);
         }
-        deleteResume(uuid, searchKey);
+        return searchKey;
     }
 
     @Override
