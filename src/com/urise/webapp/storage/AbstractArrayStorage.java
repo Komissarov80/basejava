@@ -33,19 +33,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    public final Resume getResume(String uuid, Object index) {
-        return STORAGE[(Integer)index];
+    public final Resume getResume(Object searchKey) {
+        return STORAGE[(Integer)searchKey];
     }
 
     @Override
-    public void deleteResume(String uuid, Object index) {
-        deleteResumeArray(index);
+    public void deleteResume(Object searchKey) {
+        deleteResumeArray(searchKey);
         size--;
     }
 
     @Override
-    public final void updateResume(Object index, Resume resume) {
-        STORAGE[(Integer) index] = resume;
+    public final void updateResume(Object searchKey, Resume resume) {
+        STORAGE[(Integer) searchKey] = resume;
     }
 
     public final Resume getPerIndex(int index) {
@@ -58,7 +58,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     public abstract void saveArrayResume(Resume resume);
 
-    public abstract void deleteResumeArray(Object index);
+    public abstract void deleteResumeArray(Object searchKey);
 
     public abstract Object getSearchKey(String uuid);
 

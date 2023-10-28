@@ -14,8 +14,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public void deleteResumeArray(Object index) {
-        System.arraycopy(STORAGE, (Integer)index + 1, STORAGE, (Integer)index, size - (Integer)index - 1);
+    public void deleteResumeArray(Object searchKey) {
+        System.arraycopy(STORAGE, (Integer)searchKey + 1, STORAGE, (Integer)searchKey, size - (Integer)searchKey - 1);
     }
 
     @Override

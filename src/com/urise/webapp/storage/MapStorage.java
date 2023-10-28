@@ -27,11 +27,11 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void updateResume(Object index, Resume r) {
+    public void updateResume(Object searchKey, Resume r) {
         if (isExist(r.getUuid()) == null) {
             throw new NotExistStorageException(r.getUuid());
         }
-        storage.put(r.getUuid(), r);
+        storage.put((String) searchKey, r);
     }
 
     @Override
@@ -48,19 +48,19 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void deleteResume(String uuid, Object index) {
-        if (isExist(uuid) == null) {
-            throw new NotExistStorageException(uuid);
+    public void deleteResume(Object searchKey) {
+        if (isExist((String)searchKey) == null) {
+            throw new NotExistStorageException((String) searchKey);
         }
-        storage.remove(uuid);
+        storage.remove(searchKey);
     }
 
     @Override
-    public Resume getResume(String uuid, Object index) {
-        if (isExist(uuid) == null) {
-            throw new NotExistStorageException(uuid);
+    public Resume getResume(Object searchKey) {
+        if (isExist((String) searchKey) == null) {
+            throw new NotExistStorageException((String) searchKey);
         }
-        return storage.get(uuid);
+        return storage.get(searchKey);
     }
 
     @Override

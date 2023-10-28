@@ -12,8 +12,8 @@ public class ArrayStorage extends AbstractArrayStorage {
         STORAGE[size] = r;
     }
 
-    public void deleteResumeArray(Object index) {
-        STORAGE[(Integer)index] = STORAGE[size - 1];
+    public void deleteResumeArray(Object searchKey) {
+        STORAGE[(Integer)searchKey] = STORAGE[size - 1];
         STORAGE[size] = null;
     }
 

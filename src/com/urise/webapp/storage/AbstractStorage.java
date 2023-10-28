@@ -8,7 +8,7 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        updateResume(getNotExistingSearchKey(r.getUuid()), r);
+        updateResume(getExistingSearchKey(r.getUuid()), r);
     }
 
     @Override
@@ -16,29 +16,21 @@ public abstract class AbstractStorage implements Storage {
         if (r == null) {
             throw new IllegalArgumentException("Can't save resume. Resume is null");
         }
-        getExistingSearchKey(r.getUuid());
+        getNotExistingSearchKey(r.getUuid());
         saveResume(r);
     }
 
     @Override
     public Resume get(String uuid) {
-        return getResume(uuid, getNotExistingSearchKey(uuid));
+        return getResume(getExistingSearchKey(uuid));
     }
 
     @Override
     public void delete(String uuid) {
-        deleteResume(uuid, getNotExistingSearchKey(uuid));
+        deleteResume(getExistingSearchKey(uuid));
     }
 
     private Object getExistingSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
-        if (searchKey != null) {
-            throw new ExistStorageException(uuid);
-        }
-        return searchKey;
-    }
-
-    private Object getNotExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
         if (searchKey == null) {
             throw new NotExistStorageException(uuid);
@@ -46,24 +38,23 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
-    @Override
-    public abstract void clear();
+    private Object getNotExistingSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (searchKey != null) {
+            throw new ExistStorageException(uuid);
+        }
+        return null;
+    }
 
-    @Override
-    public abstract int size();
-
-    @Override
-    public abstract Resume[] getAll();
-
-    public abstract void updateResume(Object index, Resume r);
+    public abstract void updateResume(Object searchKey, Resume r);
 
     public abstract void saveResume(Resume r);
 
     public abstract Object getSearchKey(String uuid);
 
-    public abstract void deleteResume(String uuid, Object index);
+    public abstract void deleteResume(Object searchKey);
 
-    public abstract Resume getResume(String uuid, Object index);
+    public abstract Resume getResume(Object searchKey);
 
     public abstract String isExist(String uuid);
 }
