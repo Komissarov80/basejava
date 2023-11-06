@@ -8,13 +8,13 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void saveArrayResume(Resume r) {
-        STORAGE[size] = r;
+    public void saveArrayResume(Resume resume, Object searchKey) {
+        STORAGE[size] = resume;
     }
 
     public void deleteResumeArray(Object searchKey) {
-        STORAGE[(Integer)searchKey] = STORAGE[size - 1];
-        STORAGE[size] = null;
+        STORAGE[(Integer) searchKey] = STORAGE[size - 1];
+        STORAGE[size - 1] = null;
     }
 
     @Override
@@ -28,8 +28,8 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public String isExist(String uuid) {
-        return null;
+    public boolean isExist(String uuid) {
+        return getSearchKey(uuid) == null ? false : true;
     }
 
 }

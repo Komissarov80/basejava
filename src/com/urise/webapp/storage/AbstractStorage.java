@@ -12,12 +12,11 @@ public abstract class AbstractStorage implements Storage {
     }
 
     @Override
-    public void save(Resume r) {
-        if (r == null) {
+    public void save(Resume resume) {
+        if (resume == null) {
             throw new IllegalArgumentException("Can't save resume. Resume is null");
         }
-        getNotExistingSearchKey(r.getUuid());
-        saveResume(r);
+        saveResume(resume, getNotExistingSearchKey(resume.getUuid()));
     }
 
     @Override
@@ -30,25 +29,25 @@ public abstract class AbstractStorage implements Storage {
         deleteResume(getExistingSearchKey(uuid));
     }
 
+    private Object getNotExistingSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(uuid)) {
+            return searchKey;
+        }
+        throw new ExistStorageException(uuid);
+    }
+
     private Object getExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
-        if (searchKey == null) {
+        if (!isExist(uuid)) {
             throw new NotExistStorageException(uuid);
         }
         return searchKey;
     }
 
-    private Object getNotExistingSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
-        if (searchKey != null) {
-            throw new ExistStorageException(uuid);
-        }
-        return null;
-    }
-
     public abstract void updateResume(Object searchKey, Resume r);
 
-    public abstract void saveResume(Resume r);
+    public abstract void saveResume(Resume resume, Object searchKey);
 
     public abstract Object getSearchKey(String uuid);
 
@@ -56,5 +55,5 @@ public abstract class AbstractStorage implements Storage {
 
     public abstract Resume getResume(Object searchKey);
 
-    public abstract String isExist(String uuid);
+    public abstract boolean isExist(String uuid);
 }
