@@ -3,7 +3,11 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
 
@@ -13,7 +17,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     public final void saveResume(Resume resume, Object searchKey) {
-        if (size + 1 > STORAGE_LIMIT) {
+        if (size == STORAGE_LIMIT) {
             throw new StorageException("storage is full, can't add resume ", resume.getUuid());
         }
         saveArrayResume(resume, searchKey);
@@ -24,8 +28,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    public Resume[] getAll() {
-        return Arrays.copyOf(STORAGE, size);
+    public List<Resume> getAllSortedByName() {
+        List resumesList =
+                new ArrayList<>(Arrays.stream(STORAGE).filter((value) -> value != null).collect(Collectors.toList()));
+        Collections.sort(resumesList, comparator);
+        return resumesList;
     }
 
     public void clear() {
@@ -34,13 +41,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     public final Resume getResume(Object searchKey) {
-        return STORAGE[(Integer)searchKey];
+        return STORAGE[(Integer) searchKey];
     }
 
     @Override
     public void deleteResume(Object searchKey) {
         deleteResumeArray(searchKey);
         size--;
+    }
+
+    @Override
+    public String toString() {
+        List<Resume> listResumes = new ArrayList<>(Arrays.stream(STORAGE).filter((resume) -> resume != null).collect(Collectors.toList()));
+        return listResumes.toString();
     }
 
     @Override

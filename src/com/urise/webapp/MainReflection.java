@@ -9,7 +9,7 @@ public class MainReflection {
 
     public static void main(String[] args)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Resume r = new Resume("Ivan");
+        Resume r = new Resume("1","Ivan");
         Class classResume = Resume.class;
         Method method = classResume.getMethod("toString", null);
         System.out.println(method.invoke(r));

@@ -3,6 +3,8 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
@@ -21,17 +23,12 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public Object getSearchKey(String uuid) {
-        return Arrays.binarySearch(STORAGE, 0, size, new Resume(uuid));
+        return Arrays.binarySearch(STORAGE, 0, size, new Resume(uuid, uuid));
     }
 
     @Override
     public boolean isExist(String uuid) {
         return (Integer) getSearchKey(uuid) < 0 ? false : true;
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.toString(STORAGE);
     }
 
 }

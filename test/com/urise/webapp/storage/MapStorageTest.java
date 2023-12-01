@@ -1,6 +1,7 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -14,9 +15,7 @@ class MapStorageTest extends AbstractArrayStorageTest{
         super(new MapStorage());
     }
 
-    @Override
-    @Test
+    @Disabled
     void overflowArrayException() {
-
     }
 }

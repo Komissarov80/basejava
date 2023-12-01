@@ -4,11 +4,16 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.Comparator;
+
 public abstract class AbstractStorage implements Storage {
 
+    Comparator<Resume> comparator = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
+
     @Override
-    public void update(Resume r) {
-        updateResume(getExistingSearchKey(r.getUuid()), r);
+    public void update(Resume resume) {
+        Object searchKey = getExistingSearchKey(resume.getUuid());
+        updateResume(searchKey, resume);
     }
 
     @Override
@@ -16,20 +21,23 @@ public abstract class AbstractStorage implements Storage {
         if (resume == null) {
             throw new IllegalArgumentException("Can't save resume. Resume is null");
         }
-        saveResume(resume, getNotExistingSearchKey(resume.getUuid()));
+        Object searchKey = getNotExistingSearchKey(resume.getUuid());
+        saveResume(resume, searchKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        return getResume(getExistingSearchKey(uuid));
+        Object searchKey = getExistingSearchKey(uuid);
+        return getResume(searchKey);
     }
 
     @Override
     public void delete(String uuid) {
-        deleteResume(getExistingSearchKey(uuid));
+        Object searchKey = getExistingSearchKey(uuid);
+        deleteResume(searchKey);
     }
 
-    private Object getNotExistingSearchKey(String uuid) {
+    protected Object getNotExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
         if (!isExist(uuid)) {
             return searchKey;
@@ -37,7 +45,7 @@ public abstract class AbstractStorage implements Storage {
         throw new ExistStorageException(uuid);
     }
 
-    private Object getExistingSearchKey(String uuid) {
+    protected Object getExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
         if (!isExist(uuid)) {
             throw new NotExistStorageException(uuid);
