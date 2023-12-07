@@ -24,6 +24,11 @@ public class Resume implements Comparable <Resume> {
         this.fullName = fullName;
     }
 
+    public Resume(String fullName) {
+        this.uuid = fullName;
+        this.fullName = fullName;
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -38,9 +43,6 @@ public class Resume implements Comparable <Resume> {
 
     @Override
     public String toString() {
-        if (this == null) {
-            return "";
-        }
         return "uuid is " + uuid + " fullName is " + fullName;
     }
 

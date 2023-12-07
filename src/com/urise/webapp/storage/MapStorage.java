@@ -22,11 +22,6 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSortedByName() {
-        return storage.values().stream().sorted(comparator).collect(Collectors.toList());
-    }
-
-    @Override
     public void updateResume(Object searchKey, Resume resume) {
         storage.put((String) searchKey, resume);
     }
@@ -58,5 +53,10 @@ public class MapStorage extends AbstractStorage {
     @Override
     public boolean isExist(String uuid) {
         return storage.containsKey(uuid);
+    }
+
+    @Override
+    public List<Resume> getAllResumes() {
+        return storage.values().stream().collect(Collectors.toList());
     }
 }

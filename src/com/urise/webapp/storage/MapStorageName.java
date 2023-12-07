@@ -5,53 +5,27 @@ import com.urise.webapp.model.Resume;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MapStorageName extends MapStorage {
+public class MapStorageName extends AbstractStorage {
 
     private final Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    public void save(Resume resume) {
-        if (resume == null) {
-            throw new IllegalArgumentException("Can't save resume. Resume is null");
-        }
-        getNotExistingSearchKey(resume.getFullName());
+    public void saveResume(Resume resume, Object searchKey) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    public Object getSearchKey(String fullName) {
-        Set<Map.Entry<String, Resume>> entrySet = storage.entrySet();
+    public Object getSearchKey(String uuid) {
         for (Map.Entry<String, Resume> entry : storage.entrySet()) {
             String key = entry.getKey();
-            String name = entry.getValue().getFullName();
-            if (name.equals(fullName)) {
-                return key;
+            Resume currentResume = entry.getValue();
+            if (currentResume.getUuid().equals(uuid)) {
+                return currentResume;
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean isExist(String fullName) {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            if (entry.getValue().getFullName().equals(fullName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public int size() {
-        return storage.size();
-    }
-
-    @Override
-    public List<Resume> getAllSortedByName() {
-        return storage.values().stream().sorted(comparator).collect(Collectors.toList());
     }
 
     @Override
@@ -60,29 +34,41 @@ public class MapStorageName extends MapStorage {
     }
 
     @Override
-    public Resume getResume(Object searchKey) {
-        return storage.get((String) searchKey);
+    public List<Resume> getAllSortedByName() {
+        return storage.values().stream().sorted(comparator).collect(Collectors.toList());
     }
 
     @Override
-    public void update(Resume resume) {
-        Object searchKey = getExistingSearchKey(resume.getFullName());
-        storage.put((String) searchKey, resume);
+    public int size() {
+        return storage.size();
+    }
+
+    @Override
+    public Resume getResume(Object searchKey) {
+        Resume r = (Resume) searchKey;
+        return storage.get(r.getUuid());
+    }
+
+    @Override
+    public boolean isExist(String uuid) {
+        return storage.containsKey(uuid);
+    }
+
+    @Override
+    public List<Resume> getAllResumes() {
+        return storage.values().stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateResume(Object searchKey, Resume resume) {
+        Resume currentResume = (Resume) searchKey;
+        storage.put(currentResume.getUuid(), resume);
     }
 
     @Override
     public void deleteResume(Object searchKey) {
-        storage.remove((String) searchKey);
-    }
-
-    private String getKeyByFullName(String fullName) {
-        Set<Map.Entry<String, Resume>> entrySet = storage.entrySet();
-        for (Map.Entry<String, Resume> entry : entrySet) {
-            if (entry.getValue().equals(fullName)) {
-                return entry.getKey();
-            }
-        }
-        return null;
+        Resume r = (Resume) searchKey;
+        storage.remove(r.getUuid());
     }
 
 }

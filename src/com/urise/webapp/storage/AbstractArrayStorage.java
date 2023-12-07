@@ -28,10 +28,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    public List<Resume> getAllSortedByName() {
-        List resumesList =
-                new ArrayList<>(Arrays.stream(STORAGE).filter((value) -> value != null).collect(Collectors.toList()));
-        Collections.sort(resumesList, comparator);
+    @Override
+    public List<Resume> getAllResumes() {
+        List<Resume> resumesList = new ArrayList<>(Arrays.asList(STORAGE).stream().filter(resume -> resume != null).collect(
+                Collectors.toList()));
         return resumesList;
     }
 
