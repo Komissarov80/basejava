@@ -2,12 +2,12 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class MapStorageName extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage {
 
     private final Map<String, Resume> storage = new HashMap<>();
 
@@ -18,24 +18,12 @@ public class MapStorageName extends AbstractStorage {
 
     @Override
     public Object getSearchKey(String uuid) {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            String key = entry.getKey();
-            Resume currentResume = entry.getValue();
-            if (currentResume.getUuid().equals(uuid)) {
-                return currentResume;
-            }
-        }
-        return null;
+        return storage.get(uuid);
     }
 
     @Override
     public void clear() {
         storage.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSortedByName() {
-        return storage.values().stream().sorted(comparator).collect(Collectors.toList());
     }
 
     @Override
@@ -45,18 +33,19 @@ public class MapStorageName extends AbstractStorage {
 
     @Override
     public Resume getResume(Object searchKey) {
-        Resume r = (Resume) searchKey;
-        return storage.get(r.getUuid());
+        return storage.get(((Resume) searchKey).getUuid());
     }
 
     @Override
     public boolean isExist(String uuid) {
-        return storage.containsKey(uuid);
+        return getSearchKey(uuid) != null;
     }
 
     @Override
     public List<Resume> getAllResumes() {
-        return storage.values().stream().collect(Collectors.toList());
+        List<Resume> resumeList = new ArrayList<>();
+        resumeList.addAll(storage.values());
+        return resumeList;
     }
 
     @Override

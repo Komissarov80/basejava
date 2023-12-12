@@ -65,7 +65,7 @@ public class MainArray {
     }
 
     static void printAll() {
-        List<Resume> all = SORTED_ARRAY_STORAGE.getAllSortedByName();
+        List<Resume> all = SORTED_ARRAY_STORAGE.getAllSorted();
         System.out.println("----------------------------");
         if (all.size() == 0) {
             System.out.println("Empty");

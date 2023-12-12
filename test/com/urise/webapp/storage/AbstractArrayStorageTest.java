@@ -68,7 +68,7 @@ public abstract class AbstractArrayStorageTest {
         resumesTest.add(r3);
         resumesTest.add(r2);
         resumesTest.add(r1);
-        assertArrayEquals(resumesTest.toArray(), storage.getAllSortedByName().toArray());
+        assertArrayEquals(resumesTest.toArray(), storage.getAllSorted().toArray());
     }
 
     @Test
@@ -76,7 +76,7 @@ public abstract class AbstractArrayStorageTest {
         storage.clear();
         assertSize(0);
         List resumes = new ArrayList<Resume>();
-        assertArrayEquals(resumes.toArray(), storage.getAllSortedByName().toArray());
+        assertArrayEquals(resumes.toArray(), storage.getAllSorted().toArray());
     }
 
     @Test

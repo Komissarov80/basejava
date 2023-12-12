@@ -26,7 +26,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public boolean isExist(String uuid) {
-        return (Integer) getSearchKey(uuid) < 0 ? false : true;
+        return ((int) getSearchKey(uuid)) < 0 ? false : true;
     }
 
 }

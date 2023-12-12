@@ -5,7 +5,6 @@ import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     public List<Resume> getAllResumes() {
-        List<Resume> resumesList = new ArrayList<>(Arrays.asList(STORAGE).stream().filter(resume -> resume != null).collect(
-                Collectors.toList()));
+        List<Resume> resumesList = new ArrayList<>();
+        int index = 0;
+        while (STORAGE[index] != null) {
+            resumesList.add(index, STORAGE[index]);
+            index++;
+        }
         return resumesList;
     }
 
@@ -52,7 +55,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     public String toString() {
-        List<Resume> listResumes = new ArrayList<>(Arrays.stream(STORAGE).filter((resume) -> resume != null).collect(Collectors.toList()));
+        List<Resume> listResumes =
+                new ArrayList<>(Arrays.stream(STORAGE).filter((resume) -> resume != null).collect(Collectors.toList()));
         return listResumes.toString();
     }
 
