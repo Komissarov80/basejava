@@ -47,7 +47,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected Object getNotExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
-        if (!isExist(uuid)) {
+        if (!isExist(searchKey)) {
             return searchKey;
         }
         throw new ExistStorageException(uuid);
@@ -55,7 +55,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected Object getExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
-        if (!isExist(uuid)) {
+        if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
         return searchKey;
@@ -71,7 +71,7 @@ public abstract class AbstractStorage implements Storage {
 
     public abstract Resume getResume(Object searchKey);
 
-    public abstract boolean isExist(String uuid);
+    public abstract boolean isExist(Object searchKey);
 
     public abstract List<Resume> getAllResumes();
 }

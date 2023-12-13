@@ -31,13 +31,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public boolean isExist(String uuid) {
-        for (Resume resume : storage) {
-            if (resume.getUuid().equals(uuid)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override

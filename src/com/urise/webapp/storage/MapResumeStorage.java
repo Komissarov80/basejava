@@ -37,15 +37,13 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public boolean isExist(String uuid) {
-        return getSearchKey(uuid) != null;
+    public boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override
     public List<Resume> getAllResumes() {
-        List<Resume> resumeList = new ArrayList<>();
-        resumeList.addAll(storage.values());
-        return resumeList;
+        return new ArrayList<>(storage.values());
     }
 
     @Override

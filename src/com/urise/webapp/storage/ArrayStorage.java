@@ -28,8 +28,8 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public boolean isExist(String uuid) {
-        return getSearchKey(uuid) == null ? false : true;
+    public boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
 }

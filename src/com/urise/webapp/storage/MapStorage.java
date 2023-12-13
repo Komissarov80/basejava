@@ -33,11 +33,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Object getSearchKey(String uuid) {
-        if (isExist(uuid)) {
-            return uuid;
-        } else {
-            return null;
-        }
+        return storage.get(uuid) != null ? storage.get(uuid).getUuid() : null;
     }
 
     @Override
@@ -51,8 +47,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public boolean isExist(String uuid) {
-        return storage.containsKey(uuid);
+    public boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override
